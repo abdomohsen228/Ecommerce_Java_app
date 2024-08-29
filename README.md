@@ -1,6 +1,7 @@
-#eCommerce Backend Application
+eCommerce Backend Application
 Overview
 This project is a fully functional and scalable backend application for an eCommerce platform, built using Java and the Spring Boot framework. It employs JSON Web Tokens (JWT) for secure authentication and leverages MySQL as the database for managing and storing data. The application provides a set of RESTful APIs that can be easily tested and documented using Postman.
+
 Features
 User Authentication: Secure user authentication with JWT, supporting user registration, login, and token-based authorization.
 Product Management: CRUD operations for managing the product catalog, allowing administrators to add, update, and remove products.
@@ -14,10 +15,3 @@ Spring Boot: A powerful framework that simplifies the development of Java applic
 JWT (JSON Web Tokens): Used for secure authentication and authorization of users.
 MySQL: A relational database management system for storing and managing data.
 Spring Data JPA: A Spring module that provides abstraction over database operations, making it easier to interact with MySQL.
-Postman: A tool used for testing and documenting APIs.
-Getting Started
-Prerequisites
-Java JDK (version 11 or later)
-Maven (for dependency management and building the project)
-MySQL (version 5.7 or later)
-Postman (for API testing)

@@ -7,8 +7,7 @@ import com.dailycodework.dreamshops.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.channels.AlreadyBoundException;
-import java.nio.file.FileSystemAlreadyExistsException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService{
     private final CategoryRepository categoryRepository;
+//    The final keyword indicates that this field must be initialized (which is handled by the @RequiredArgsConstructor)
 
     @Override
     public Category getCategoryById(long id) {

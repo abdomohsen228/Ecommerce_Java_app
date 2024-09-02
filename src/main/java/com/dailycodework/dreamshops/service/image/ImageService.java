@@ -1,7 +1,9 @@
 package com.dailycodework.dreamshops.service.image;
 
+import com.dailycodework.dreamshops.dto.ImageDto;
 import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycodework.dreamshops.model.Image;
+import com.dailycodework.dreamshops.model.Product;
 import com.dailycodework.dreamshops.repository.ImageRepository;
 import com.dailycodework.dreamshops.service.proudct.IProductService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +34,36 @@ public class ImageService implements IImageService {
 
     }
 
+
+
     @Override
-    public Image saveImage(MultipartFile file, Long productId) {
-        return null;
+    public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
+        Product product = productService.getProductById(productId);
+        List<ImageDto> savedImageDto = new ArrayList<>();
+        for (MultipartFile file : files) {
+            try{
+                Image image = new Image();
+                image.setFileName(file.getOriginalFilename());
+                image.setFileType(file.getContentType());
+                image.setImage(new SerialBlob(file.getBytes()));
+                image.setProduct(product);
+                String buildDownloadUrl ="/api/v1/images/download/";
+                String downloadUrl =buildDownloadUrl +  image.getId();
+                image.setDownloadUrl(downloadUrl);
+                Image savedImages = imageRepository.save(image);
+                image.setDownloadUrl(buildDownloadUrl  + savedImages.getId());
+                imageRepository.save(image);
+                ImageDto imageDto = new ImageDto();
+                imageDto.setImageId(image.getId());
+                imageDto.setImageName(savedImages.getFileName());
+                imageDto.setDownloadUrl(savedImages.getDownloadUrl());
+                savedImageDto.add(imageDto);
+            }catch (IOException  | SQLException e){
+                throw new RuntimeException(e.getMessage());
+            }
+
+        }
+        return savedImageDto;
     }
 
     @Override

@@ -8,7 +8,9 @@ import java.util.List;
 
 
 @Repository
+// This annotation is not strictly necessary with Spring Data JPA because Spring automatically detects interfaces that extend JpaRepository as repositories
 public interface ProductRepository extends JpaRepository<Product,Long> {
+    // <entity manage, primary key>
 
 
     List<Product> findByCategoryName(String category);

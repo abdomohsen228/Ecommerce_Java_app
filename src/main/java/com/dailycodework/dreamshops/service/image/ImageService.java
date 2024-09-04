@@ -37,34 +37,38 @@ public class ImageService implements IImageService {
 
 
     @Override
-    public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
+    public List<ImageDto> saveImages(Long productId, List<MultipartFile> files) {
         Product product = productService.getProductById(productId);
         List<ImageDto> savedImageDto = new ArrayList<>();
         for (MultipartFile file : files) {
-            try{
+            try {
                 Image image = new Image();
                 image.setFileName(file.getOriginalFilename());
                 image.setFileType(file.getContentType());
                 image.setImage(new SerialBlob(file.getBytes()));
                 image.setProduct(product);
-                String buildDownloadUrl ="/api/v1/images/download/";
-                String downloadUrl =buildDownloadUrl +  image.getId();
-                image.setDownloadUrl(downloadUrl);
-                Image savedImages = imageRepository.save(image);
-                image.setDownloadUrl(buildDownloadUrl  + savedImages.getId());
-                imageRepository.save(image);
+
+                // Save the image to generate the ID
+                Image savedImage = imageRepository.save(image);
+
+                // Now set the correct download URL
+                String buildDownloadUrl = "/api/v1/images/download/" + savedImage.getId();
+                savedImage.setDownloadUrl(buildDownloadUrl);
+                imageRepository.save(savedImage);
+
+                // Prepare the DTO
                 ImageDto imageDto = new ImageDto();
-                imageDto.setImageId(image.getId());
-                imageDto.setImageName(savedImages.getFileName());
-                imageDto.setDownloadUrl(savedImages.getDownloadUrl());
+                imageDto.setImageId(savedImage.getId());
+                imageDto.setImageName(savedImage.getFileName());
+                imageDto.setDownloadUrl(savedImage.getDownloadUrl());
                 savedImageDto.add(imageDto);
-            }catch (IOException  | SQLException e){
+            } catch (IOException | SQLException e) {
                 throw new RuntimeException(e.getMessage());
             }
-
         }
         return savedImageDto;
     }
+
 
     @Override
     public void updateImage(MultipartFile file, Long imageId) {

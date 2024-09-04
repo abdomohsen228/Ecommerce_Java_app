@@ -21,13 +21,14 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}images")
+@RequestMapping("${api.prefix}/images")
 public class ImageController {
     private final ImageService imageService;
+
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files,@RequestParam Long productId ) {
         try {
-            List<ImageDto> imageDtos = imageService.saveImages(files, productId);
+            List<ImageDto> imageDtos = imageService.saveImages(productId,files );
             return ResponseEntity.ok(new ApiResponse("upload success!", imageDtos));
         }
         catch (Exception e) {
@@ -42,20 +43,19 @@ public class ImageController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +image.getFileName() + "\"").body(resource);
     }
     @PutMapping("/image/{imageId}/update")
-    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {
-        try{
+    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestParam MultipartFile file) {
+        try {
             Image image = imageService.getImageById(imageId);
-            if (image != null)
-            {
+            if (image != null) {
                 imageService.updateImage(file, imageId);
                 return ResponseEntity.ok(new ApiResponse("update success!", null));
             }
-
-        }catch (ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Update failed!", null));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed!", INTERNAL_SERVER_ERROR));
     }
+
     @DeleteMapping("/image/{imageId}/delete")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try{

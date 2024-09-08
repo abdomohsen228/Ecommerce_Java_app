@@ -1,12 +1,14 @@
 package com.dailycodework.dreamshops.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.math.BigDecimal;
-import java.util.Set;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -21,8 +23,9 @@ public class Cart {
 
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
+    // Initialize the items set to avoid NullPointerException
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CartItem> items;
+    private Set<CartItem> items = new HashSet<>();
 
     public void addItem(CartItem cartItem) {
         cartItem.setCart(this);

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @Entity
+
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

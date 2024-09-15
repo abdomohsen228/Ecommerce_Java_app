@@ -1,7 +1,9 @@
 package com.dailycodework.dreamshops.repository;
 
-import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.dailycodework.dreamshops.model.User;
+
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
 }

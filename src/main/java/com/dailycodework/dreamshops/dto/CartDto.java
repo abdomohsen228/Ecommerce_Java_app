@@ -9,6 +9,5 @@ import java.util.Set;
 public class CartDto {
     private Long cartId;
     private Set<CartItemDto> items;
-    public BigDecimal totalAmount;
-
+    private BigDecimal totalAmount;
 }

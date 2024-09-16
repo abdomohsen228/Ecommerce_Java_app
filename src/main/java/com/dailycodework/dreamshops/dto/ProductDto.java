@@ -1,7 +1,6 @@
 package com.dailycodework.dreamshops.dto;
 
 import com.dailycodework.dreamshops.model.Category;
-
 import lombok.Data;
 
 import java.math.BigDecimal;

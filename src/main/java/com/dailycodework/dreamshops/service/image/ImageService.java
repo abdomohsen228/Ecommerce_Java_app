@@ -5,8 +5,8 @@ import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycodework.dreamshops.model.Image;
 import com.dailycodework.dreamshops.model.Product;
 import com.dailycodework.dreamshops.repository.ImageRepository;
-import com.dailycodework.dreamshops.service.proudct.IProductService;
 import lombok.RequiredArgsConstructor;
+import com.dailycodework.dreamshops.service.product.IProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

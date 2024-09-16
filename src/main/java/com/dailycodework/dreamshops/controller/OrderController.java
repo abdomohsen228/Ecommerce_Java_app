@@ -1,6 +1,5 @@
 package com.dailycodework.dreamshops.controller;
 
-
 import com.dailycodework.dreamshops.dto.OrderDto;
 import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycodework.dreamshops.model.Order;
@@ -13,38 +12,39 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("${api.prefix}/orders")
 public class OrderController {
     private final IOrderService orderService;
 
     @PostMapping("/order")
-    public ResponseEntity<ApiResponse> createOrder( @RequestParam Long userId) {
-       try{
-           Order order = orderService.placeHolder(userId);
-           return ResponseEntity.ok(new ApiResponse("Item Order Success", order));
-       }
-       catch(Exception ex){
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Error Occurred", ex.getMessage()));
-       }
-    }
-    @GetMapping("{orderId}/order")
-    public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId) {
-        try{
-            OrderDto order = orderService.getOrder(orderId);
-            return ResponseEntity.ok(new ApiResponse("Item Order Success", order));
-        }catch (ResourceNotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Oops!", ex.getMessage()));
+    public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
+        try {
+            Order order =  orderService.placeHolder(userId);
+            return ResponseEntity.ok(new ApiResponse("Item Order Success!", order));
+        } catch (Exception e) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Error Occured!", e.getMessage()));
         }
     }
-    @GetMapping("{userId}/orders")
+
+    @GetMapping("/{orderId}/order")
+    public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId) {
+        try {
+            OrderDto order = orderService.getOrder(orderId);
+            return ResponseEntity.ok(new ApiResponse("Item Order Success!", order));
+        } catch (ResourceNotFoundException e) {
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Oops!", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{userId}/order")
     public ResponseEntity<ApiResponse> getUserOrders(@PathVariable Long userId) {
-        try{
+        try {
             List<OrderDto> order = orderService.getUserOrders(userId);
-            return ResponseEntity.ok(new ApiResponse("Item Order Success", order));
-        }catch (ResourceNotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Oops!", ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse("Item Order Success!", order));
+        } catch (ResourceNotFoundException e) {
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Oops!", e.getMessage()));
         }
     }
 }

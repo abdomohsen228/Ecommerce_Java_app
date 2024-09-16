@@ -1,15 +1,12 @@
 package com.dailycodework.dreamshops.dto;
 
-
-
-import lombok.Data;
+import com.dailycodework.dreamshops.model.Product;
 
 import java.math.BigDecimal;
 
-@Data
 public class CartItemDto {
     private Long itemId;
-    private BigDecimal price;
-    private BigDecimal quantity;
+    private Integer quantity;
+    private BigDecimal unitPrice;
     private ProductDto product;
 }

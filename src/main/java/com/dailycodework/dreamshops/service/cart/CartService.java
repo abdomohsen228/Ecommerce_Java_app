@@ -1,12 +1,14 @@
 package com.dailycodework.dreamshops.service.cart;
 import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycodework.dreamshops.model.Cart;
+import com.dailycodework.dreamshops.model.User;
 import com.dailycodework.dreamshops.repository.CartItemRepository;
 import com.dailycodework.dreamshops.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -40,18 +42,16 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart() {
-        // Create a new empty Cart object
-        Cart newCart = new Cart();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
 
-        // Generate a new unique Cart ID (this uses a cartIdGenerator to ensure unique IDs)
-        Long newCartId = cartIdGenerator.incrementAndGet();
 
-        // Set the generated unique ID to the newly created Cart object
-        newCart.setId(newCartId);
 
-        // Save the new cart in the database using cartRepository, and return the saved cart's ID
-        return cartRepository.save(newCart).getId();
     }
 
     @Override

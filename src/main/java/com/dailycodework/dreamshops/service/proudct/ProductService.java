@@ -2,6 +2,7 @@ package com.dailycodework.dreamshops.service.proudct;
 
 import com.dailycodework.dreamshops.dto.ImageDto;
 import com.dailycodework.dreamshops.dto.ProductDto;
+import com.dailycodework.dreamshops.exceptions.AlreadyExistsException;
 import com.dailycodework.dreamshops.exceptions.ResourceNotFoundException;
 import com.dailycodework.dreamshops.model.Category;
 import com.dailycodework.dreamshops.model.Image;
@@ -11,6 +12,8 @@ import com.dailycodework.dreamshops.repository.ImageRepository;
 import com.dailycodework.dreamshops.repository.ProductRepository;
 import com.dailycodework.dreamshops.request.AddProductRequest;
 import com.dailycodework.dreamshops.request.ProductUpdateRequest;
+
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements com.dailycodework.dreamshops.service.product.IProductService {
+public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
@@ -33,6 +36,9 @@ public class ProductService implements com.dailycodework.dreamshops.service.prod
         // If No, the save it as a new category
         // The set as the new product category.
 
+        if(productExists(request.getName(), request.getBrand())) {
+            throw new AlreadyExistsException(request.getBrand()+" "+ request.getName()+" already exists you may update instead!");
+        }
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
@@ -40,6 +46,12 @@ public class ProductService implements com.dailycodework.dreamshops.service.prod
                 });
         request.setCategory(category);
         return productRepository.save(createProduct(request, category));
+    }
+
+
+    private boolean productExists(String name ,String brand) {
+        return productRepository.existsByNameAndBrand(name,brand);
+
     }
 
     private Product createProduct(AddProductRequest request, Category category) {

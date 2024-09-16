@@ -1,4 +1,4 @@
-package com.dailycodework.dreamshops.service.product;
+package com.dailycodework.dreamshops.service.proudct;
 import com.dailycodework.dreamshops.dto.ProductDto;
 import com.dailycodework.dreamshops.model.Product;
 import com.dailycodework.dreamshops.request.AddProductRequest;

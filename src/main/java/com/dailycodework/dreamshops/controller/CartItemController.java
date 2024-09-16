@@ -6,7 +6,7 @@ import com.dailycodework.dreamshops.response.ApiResponse;
 import com.dailycodework.dreamshops.service.cart.ICartItemService;
 import com.dailycodework.dreamshops.service.cart.ICartService;
 import com.dailycodework.dreamshops.service.user.IUserService;
-import com.dailycodework.dreamshops.service.user.UserService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

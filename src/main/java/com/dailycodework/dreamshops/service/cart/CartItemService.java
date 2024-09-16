@@ -7,7 +7,7 @@ import com.dailycodework.dreamshops.model.Product;
 import com.dailycodework.dreamshops.repository.CartItemRepository;
 import com.dailycodework.dreamshops.repository.CartRepository;
 
-import com.dailycodework.dreamshops.service.product.IProductService;
+import com.dailycodework.dreamshops.service.proudct.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

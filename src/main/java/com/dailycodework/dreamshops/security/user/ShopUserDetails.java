@@ -36,6 +36,7 @@ public class ShopUserDetails implements UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+
                 authorities);
     }
     @Override

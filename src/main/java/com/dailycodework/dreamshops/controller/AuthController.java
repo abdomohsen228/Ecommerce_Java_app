@@ -8,6 +8,7 @@ import com.dailycodework.dreamshops.security.jwt.JwtUtils;
 import com.dailycodework.dreamshops.security.user.ShopUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -23,28 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-
 @RequestMapping("${api.prefix}/auth")
 public class AuthController {
-    private  final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
 
-
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;  // Remove the @Autowired here, constructor injection will handle it
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
         try {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),request.getPassword()));
+                            request.getEmail(), request.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateTokenForUser(authentication);
             ShopUserDetails userDetails = (ShopUserDetails) authentication.getPrincipal();
-            JwtResponse jwtResponse = new JwtResponse(userDetails.getId(),jwt);
-            return  ResponseEntity.ok(new ApiResponse("Login Successful",jwtResponse));
+            JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), jwt);
+            return ResponseEntity.ok(new ApiResponse("Login Successful", jwtResponse));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(),null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
-
     }
 }
